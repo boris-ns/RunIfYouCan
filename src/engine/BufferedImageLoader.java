@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 /**
  * Created by boris on 11/11/16.
+ * edited by nmikovic
  */
 
 // Klasa koja sluzi za ucitavanje slike u BufferedImage objekat na osnovu putanje koja se prosledi
