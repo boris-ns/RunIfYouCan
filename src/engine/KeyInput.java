@@ -1,10 +1,11 @@
 package engine;
 
-import game.Game;
-import game.objects.Hero;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
+import game.Game;
+import game.objects.Bullet;
+import game.objects.Hero;
 
 /**
  * Created by zdravko on 6.11.16..
@@ -14,7 +15,7 @@ public class KeyInput extends KeyAdapter
     Game game;
     Integer key;
 
-    private boolean keyDown[] = new boolean[4]; // 0-up 1-down 2-right 3-left
+    private boolean keyDown[] = new boolean[5]; // 0-up 1-down 2-right 3-left 4-shoot
 
     public KeyInput(Game g)
     {
@@ -34,6 +35,10 @@ public class KeyInput extends KeyAdapter
         if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) { hero.setVelX(4); keyDown[2] = true;}
         if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) { hero.setVelY(-4); keyDown[0] = true; }
         if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) { hero.setVelY(4); keyDown[1] = true; }
+        if (key == KeyEvent.VK_SPACE) {
+        	game.getBulletList().addBullet(new Bullet(hero.getX() + hero.WIDTH / 2.0f, hero.getY() + hero.HEIGHT / 2.0f, hero.getLastVelX()));; 
+        	keyDown[4] = true;
+        }
 
 
         if(key == KeyEvent.VK_ESCAPE)
@@ -50,6 +55,7 @@ public class KeyInput extends KeyAdapter
         if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) keyDown[2] = false;
         if (key == KeyEvent.VK_UP || key == KeyEvent.VK_W) keyDown[0] = false;
         if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) keyDown[1] = false;
+        if (key == KeyEvent.VK_SPACE) keyDown[4] = false;
 
         //vertical movement
         if(!keyDown[0] && !keyDown[1]) hero.setVelY(0);

@@ -7,18 +7,19 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import game.Game;
 import game.GameObject;
+import game.objects.Hero;
 import game.objects.Wall;
 
 public class MapGenerator {
-		
+	
 	/**
 	 * Static method that generates game map from *.txt file.
 	 * In *.txt file '*' represents Wall objects.
-	 * @return GameObject type ArrayList-matrix with all objects 
 	 */
-	public static ArrayList<ArrayList<GameObject>> generateMap(LinkedList<GameObject> objects) {
-		return addObjectsToMap(objects);
+	public static void generateMap(Game game) {
+		addObjectsToMap(game);
 	}
 	
 	/**
@@ -28,26 +29,25 @@ public class MapGenerator {
 	public static ArrayList<char[]> generateMapAsCharArray() {
 		return readDataFromFile();
 	}
-	
+
 	/**
 	 * Method that goes through ArrayList of char arrays that are read from text file before.
 	 * And according to each char method adds appropriate GameObject.
 	 * @param objects - list of objects that are added into the game.
-	 * @return ArrayList matrix of objects
 	 */
-	private static ArrayList<ArrayList<GameObject>> addObjectsToMap(LinkedList<GameObject> objects) {
-		ArrayList<ArrayList<GameObject>> map = new ArrayList<ArrayList<GameObject>>();
-		
+	private static void addObjectsToMap(Game game) {		
 		ArrayList<char[]> dataArray = readDataFromFile();
+		
 		for(int i = 0; i < dataArray.size(); ++i) {
 			for(int j = 0; j < dataArray.get(i).length; ++j) {
 				if(dataArray.get(i)[j] == '*') {
-					objects.add(new Wall(j * Wall.SIZE, i * Wall.SIZE));
+					game.getWallList().addWallBlock(new Wall(j * Wall.SIZE, i * Wall.SIZE));;
+				}
+				else if(dataArray.get(i)[j] == 'P') {
+					game.getObjects().add(new Hero(j * Hero.HEIGHT, i * Hero.WIDTH));
 				}
 			}
 		}
-		
-		return map;
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class MapGenerator {
 	/**
 	 * Method that gets all files from 'maps' folder and randomly chooses one file(map)
 	 * that will be generated.
-	 * @return String representation of choosen file (map)
+	 * @return String representation of chosen file (map)
 	 */
 	private static String loadRandomMap() {
 		File mapsFolder = new File("maps/");

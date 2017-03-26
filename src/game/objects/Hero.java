@@ -14,10 +14,12 @@ public class Hero extends GameObject
     public static final int WIDTH = 32;
     public static final int HEIGHT = 32;
 
+    private float lastVelX;
 
     public Hero(float x, float y)
     {
         super(x, y, 0, 0, ObjectType.Hero);
+        lastVelX = 0;
     }
 
     // Cemu ovo sluzi ?
@@ -33,6 +35,8 @@ public class Hero extends GameObject
         x += velX;
         y += velY;
 
+        if (velX != 0)
+        	lastVelX = velX;
         // u zavisnosti od tla, MAX brzina varira
     }
 
@@ -49,6 +53,10 @@ public class Hero extends GameObject
         g2d.draw(getLeftBounds());
         g2d.draw(getRightBounds());
         g2d.draw(getTopBounds());
+    }
+    
+    public float getLastVelX() {
+    	return lastVelX;
     }
 
     @Override

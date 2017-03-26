@@ -1,12 +1,13 @@
 package engine;
 
+import java.util.LinkedList;
+
 import game.Game;
 import game.GameObject;
-import game.ObjectType;
+import game.objects.Bullet;
 import game.objects.Hero;
 import game.objects.Wall;
-
-import java.util.LinkedList;
+import game.objects.lists.BulletList;
 
 /**
  * Created by boris on 11/6/16.
@@ -16,19 +17,26 @@ public class CollisionHandler {
     private Game game;
     private Hero hero;
     private Wall wall;
-
+    private Bullet bullet;
+    private LinkedList<Wall> wallList;
+    
     public CollisionHandler(Game game) {
         this.game = game;
         this.hero = game.getHero();
+        
+        wallList = game.getWallList().getWallLinkedList();
     }
 
     public void tick(LinkedList<GameObject> objects) {
-    	collisionHeroWall(findWallObjects(objects));
+    	collisionHeroWall();
+    	collisionBulletWall();
     }
 
-    private void collisionHeroWall(LinkedList<GameObject> walls) {
-        for (int i = 0; i < walls.size(); ++i) {
-            wall = (Wall) walls.get(i);
+    private void collisionHeroWall() {
+    	LinkedList<Wall> wallList = game.getWallList().getWallLinkedList();
+    	
+        for (int i = 0; i < wallList.size(); ++i) {
+            wall = (Wall) wallList.get(i);
 
             if(wall.getBounds().intersects(hero.getTopBounds()))
                 hero.setY(wall.getY() + Wall.SIZE);
@@ -44,21 +52,19 @@ public class CollisionHandler {
         }
     }
     
-    private LinkedList<GameObject> findWallObjects(LinkedList<GameObject> objects) {
-    	LinkedList<GameObject> walls = new LinkedList<GameObject>();
-    	for (int i = 0; i < objects.size(); ++i) {
-    		if (objects.get(i).getObjectType() == ObjectType.Wall)
-    			walls.add(objects.get(i));
-    	}
+    private void collisionBulletWall() {
+    	BulletList bulletList = game.getBulletList();
     	
-    	return walls;
-    }
-    
-    private Hero findHeroInList(LinkedList<GameObject> objects) {
-        for (int i = 0; i < objects.size(); ++i)
-            if(objects.get(i).getObjectType() == ObjectType.Hero)
-                return (Hero) objects.get(i);
-
-        return null;
+    	for (int i = 0; i < bulletList.getBulletLinkedList().size(); ++i) {
+    		for (int j = 0; j < wallList.size(); ++j) {
+    			bullet = bulletList.getBulletLinkedList().get(i);
+    			wall = wallList.get(j);
+    			
+    			if (bullet.getBounds().intersects(wall.getBounds())) {
+    				bulletList.removeBullet(bullet);
+    				break;
+    			}
+    		}
+    	}
     }
 }
