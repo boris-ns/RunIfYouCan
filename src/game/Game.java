@@ -1,31 +1,31 @@
 package game;
 
 import java.awt.Graphics;
-import java.util.LinkedList;
 
 import engine.CollisionHandler;
 import engine.map.MapGenerator;
 import game.objects.Hero;
 import game.objects.lists.BulletList;
 import game.objects.lists.WallList;
+import game.objects.lists.ZombieList;
 
 public class Game {
-
-    private LinkedList<GameObject> objects = new LinkedList<>();
 
     private Hero hero;
 
     private CollisionHandler collisionHandler;
     private BulletList bulletList;
+    private ZombieList zombieList;
     private WallList wallList;
 
     public Game()
     {  	
     	wallList = new WallList();
+    	zombieList = new ZombieList();
     	bulletList = new BulletList();
 
     	MapGenerator.generateMap(this);
-        hero = findHero();
+
         if (hero == null) {
         	System.out.println("Hero isn't initialized. The game will stop...");
         	System.exit(-1);
@@ -36,19 +36,16 @@ public class Game {
 
     public void tick()
     {
-        for (int i = 0; i < objects.size(); ++i)
-        	objects.get(i).tick();
-
+    	hero.tick();
+    	zombieList.tick();
         bulletList.tick();
-        collisionHandler.tick(objects);
+        collisionHandler.tick();
     }
 
 
     public void render(Graphics g) {
-        for (int i = 0; i < objects.size(); ++i) {
-        	objects.get(i).render(g);
-        }
-        
+        hero.render(g);
+        zombieList.render(g);
         bulletList.render(g);
         wallList.render(g);
     }
@@ -61,8 +58,8 @@ public class Game {
     	return wallList;
     }
 
-    public LinkedList<GameObject> getObjects() {
-    	return objects;
+    public ZombieList getZombieList() {
+    	return zombieList;
     }
 
     public Hero getHero() {
@@ -73,7 +70,7 @@ public class Game {
     	this.hero = hero;
     }
     
-    private Hero findHero() {
+/*    private Hero findHero() {
     	for (int i = 0; i < objects.size(); ++i) {
     		if (objects.get(i).getObjectType() == ObjectType.Hero) {
     			return (Hero) objects.get(i);
@@ -81,7 +78,7 @@ public class Game {
     	}
     	
     	return null;
-    }
+    }*/
     /*public void addGameObject(GameObject gameObject)
     {
         objects.add(gameObject);

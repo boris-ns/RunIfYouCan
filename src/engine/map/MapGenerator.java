@@ -11,6 +11,7 @@ import game.Game;
 import game.GameObject;
 import game.objects.Hero;
 import game.objects.Wall;
+import game.objects.Zombie;
 
 public class MapGenerator {
 	
@@ -43,8 +44,11 @@ public class MapGenerator {
 				if(dataArray.get(i)[j] == '*') {
 					game.getWallList().addWallBlock(new Wall(j * Wall.SIZE, i * Wall.SIZE));;
 				}
+				else if(dataArray.get(i)[j] == 'Z') {
+					game.getZombieList().addZombie(new Zombie(j * Zombie.SIZE, i * Zombie.SIZE));
+				}
 				else if(dataArray.get(i)[j] == 'P') {
-					game.getObjects().add(new Hero(j * Hero.HEIGHT, i * Hero.WIDTH));
+					game.setHero(new Hero(j * Hero.HEIGHT, i * Hero.WIDTH));
 				}
 			}
 		}

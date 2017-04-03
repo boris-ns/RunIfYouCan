@@ -3,7 +3,6 @@ package engine;
 import java.util.LinkedList;
 
 import game.Game;
-import game.GameObject;
 import game.objects.Bullet;
 import game.objects.Hero;
 import game.objects.Wall;
@@ -27,7 +26,7 @@ public class CollisionHandler {
         wallList = game.getWallList().getWallLinkedList();
     }
 
-    public void tick(LinkedList<GameObject> objects) {
+    public void tick() {
     	collisionHeroWall();
     	collisionBulletWall();
     }
